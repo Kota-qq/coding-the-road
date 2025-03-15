@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { sendLineNotification } from './lineNotify'
 
 // インメモリストア（本番環境では Redis などを使用することを推奨）
 const rateLimit = new Map()
@@ -13,7 +12,6 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
   // Security Headers
-  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
   response.headers.set('X-Frame-Options', 'DENY')
   response.headers.set('X-Content-Type-Options', 'nosniff')
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
