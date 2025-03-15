@@ -1,7 +1,21 @@
 import Link from 'next/link';
 
 interface BlogCardProps {
-  post: any;
+  post: {
+    id: string;
+    properties: {
+      Title?: {
+        title?: Array<{
+          plain_text?: string;
+        }>;
+      };
+      Date?: {
+        date?: {
+          start?: string;
+        };
+      };
+    };
+  };
 }
 
 export default function BlogCard({ post }: BlogCardProps) {

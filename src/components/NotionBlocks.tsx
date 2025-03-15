@@ -1,3 +1,22 @@
+interface NotionBlock {
+  type: string;
+  id: string;
+  [key: string]: any;
+}
+
+interface RichText {
+  annotations: {
+    bold?: boolean;
+    code?: boolean;
+    italic?: boolean;
+    strikethrough?: boolean;
+    underline?: boolean;
+  };
+  text: {
+    content: string;
+  };
+}
+
 interface NotionBlocksProps {
   blocks: any[];
 }

@@ -10,8 +10,28 @@ interface PageProps {
   }>;
 }
 
+// anyの型定義を追加
+interface NotionBlock {
+  id: string;
+  type: string;
+  [key: string]: any;
+}
+
+interface RichText {
+  annotations: {
+    bold?: boolean;
+    code?: boolean;
+    italic?: boolean;
+    strikethrough?: boolean;
+    underline?: boolean;
+  };
+  text: {
+    content: string;
+  };
+}
+
 // Notionのブロックを変換するヘルパー関数
-function renderBlock(block: any) {
+function renderBlock(block: NotionBlock) {
   if (!block) return null;
   
   const { type } = block;

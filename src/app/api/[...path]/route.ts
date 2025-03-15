@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 
-export async function GET(request: Request) {
+export async function GET() {
   // API Rate Limiting
   const headersList = headers()
   const ip = headersList.get('x-forwarded-for') || 'unknown'
@@ -11,4 +11,5 @@ export async function GET(request: Request) {
   }
 
   // その他のAPI処理
+  return new Response('OK');
 } 

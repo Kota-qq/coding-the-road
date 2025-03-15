@@ -21,7 +21,7 @@ export const getPosts = cache(async () => {
   return response.results;
 });
 
-export const getPostById = cache(async (pageId: string) => {
+export async function getPostById(pageId: string) {
   try {
     const page = await notion.pages.retrieve({ page_id: pageId });
     const blocks = await notion.blocks.children.list({ block_id: pageId });
@@ -30,7 +30,7 @@ export const getPostById = cache(async (pageId: string) => {
       ...page,
       content: blocks.results,
     };
-  } catch (error) {
+  } catch (_) {
     return null;
   }
-}); 
+} 

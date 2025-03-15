@@ -1,5 +1,5 @@
+import { Github, Twitter } from 'lucide-react';
 import Image from 'next/image';
-import { Github, Twitter, Wrench, Settings, Gauge } from 'lucide-react';
 import { FaPhp, FaLaravel } from 'react-icons/fa';
 import { DiPostgresql } from 'react-icons/di';
 import Link from 'next/link';
@@ -26,17 +26,6 @@ export const metadata: Metadata = {
 }
 
 export default function AboutPage() {
-  const skills = [
-    'TypeScript',
-    'React',
-    'Next.js',
-    'Node.js',
-    'MySQL',
-    'AWS',
-    'Docker',
-    'Git'
-  ];
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100">
       <div className="pt-32 pb-20 container mx-auto px-6">
