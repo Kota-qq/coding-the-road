@@ -3,98 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
-import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
-
-interface NotionPost extends PageObjectResponse {
-  properties: {
-    Title: {
-      type: 'title';
-      title: Array<{
-        plain_text: string;
-      }>;
-    };
-    Date: {
-      type: 'date';
-      date: {
-        start: string;
-      };
-    };
-    Description: {
-      type: 'rich_text';
-      rich_text: Array<{
-        plain_text: string;
-      }>;
-    };
-  };
-}
-
-// anyの型定義を追加
-interface NotionBlock {
-  type: string;
-  id: string;
-  paragraph?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-      annotations?: {
-        bold?: boolean;
-        code?: boolean;
-        italic?: boolean;
-        strikethrough?: boolean;
-        underline?: boolean;
-      };
-    }>;
-  };
-  heading_1?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-    }>;
-  };
-  heading_2?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-    }>;
-  };
-  heading_3?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-    }>;
-  };
-  bulleted_list_item?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-    }>;
-  };
-  numbered_list_item?: {
-    rich_text: Array<{
-      text: {
-        content: string;
-      };
-      plain_text: string;
-    }>;
-  };
-  [key: string]: unknown;
-}
+import type { NotionPost, NotionBlock } from '@/lib/notion';  // 型をインポート
 
 // anyの型を修正
 interface RichTextContent {
@@ -108,15 +17,6 @@ interface RichTextContent {
   text?: {
     content?: string;
   };
-}
-
-interface NotionResponse {
-  results: Array<{
-    id: string;
-    properties: Record<string, unknown>;
-  }>;
-  next_cursor: string | null;
-  has_more: boolean;
 }
 
 // Notionのブロックを変換するヘルパー関数
@@ -188,11 +88,17 @@ function renderBlock(block: NotionBlock) {
   }
 }
 
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
 export async function generateMetadata(
-  { params }: { params: { id: string } }
+  { params }: PageProps
 ): Promise<Metadata> {
   const resolvedParams = await params;
-  const post = await getPostById(resolvedParams.id) as NotionPost;
+  const post = await getPostById(resolvedParams.id);
   if (!post) {
     return {
       title: 'Not Found',
@@ -219,10 +125,10 @@ export async function generateMetadata(
 }
 
 export default async function PostPage(
-  { params }: { params: { id: string } }
+  { params }: PageProps
 ) {
   const resolvedParams = await params;
-  const post = await getPostById(resolvedParams.id) as NotionPost;
+  const post = await getPostById(resolvedParams.id);
   const allPosts = await getPosts() as NotionPost[];
 
   if (!post) {
