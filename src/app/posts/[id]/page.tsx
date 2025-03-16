@@ -3,31 +3,120 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
+import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 
 interface PageProps {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
+}
+
+interface NotionPost extends PageObjectResponse {
+  properties: {
+    Title: {
+      type: 'title';
+      title: Array<{
+        plain_text: string;
+      }>;
+    };
+    Date: {
+      type: 'date';
+      date: {
+        start: string;
+      };
+    };
+    Description: {
+      type: 'rich_text';
+      rich_text: Array<{
+        plain_text: string;
+      }>;
+    };
+  };
 }
 
 // anyの型定義を追加
 interface NotionBlock {
-  id: string;
   type: string;
-  [key: string]: any;
+  id: string;
+  paragraph?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+      annotations?: {
+        bold?: boolean;
+        code?: boolean;
+        italic?: boolean;
+        strikethrough?: boolean;
+        underline?: boolean;
+      };
+    }>;
+  };
+  heading_1?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+    }>;
+  };
+  heading_2?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+    }>;
+  };
+  heading_3?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+    }>;
+  };
+  bulleted_list_item?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+    }>;
+  };
+  numbered_list_item?: {
+    rich_text: Array<{
+      text: {
+        content: string;
+      };
+      plain_text: string;
+    }>;
+  };
+  [key: string]: unknown;
 }
 
-interface RichText {
-  annotations: {
+// anyの型を修正
+interface RichTextContent {
+  annotations?: {
     bold?: boolean;
     code?: boolean;
     italic?: boolean;
     strikethrough?: boolean;
     underline?: boolean;
   };
-  text: {
-    content: string;
+  text?: {
+    content?: string;
   };
+}
+
+interface NotionResponse {
+  results: Array<{
+    id: string;
+    properties: Record<string, unknown>;
+  }>;
+  next_cursor: string | null;
+  has_more: boolean;
 }
 
 // Notionのブロックを変換するヘルパー関数
@@ -35,7 +124,7 @@ function renderBlock(block: NotionBlock) {
   if (!block) return null;
   
   const { type } = block;
-  const value = block[type];
+  const value = block[type] as { rich_text?: Array<RichTextContent> };
 
   if (!value) return null;
 
@@ -43,7 +132,7 @@ function renderBlock(block: NotionBlock) {
     case 'paragraph':
       return (
         <p className="mb-4 text-zinc-600">
-          {value.rich_text?.map((text: any, i: number) => {
+          {value.rich_text?.map((text: RichTextContent, i: number) => {
             if (!text) return null;
             
             const {
@@ -99,8 +188,11 @@ function renderBlock(block: NotionBlock) {
   }
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await getPostById(params.id);
+export async function generateMetadata(
+  { params }: { params: { id: string } }
+): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = await getPostById(resolvedParams.id) as NotionPost;
   if (!post) {
     return {
       title: 'Not Found',
@@ -126,10 +218,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function PostPage({ params }: PageProps) {
-  const { id } = await params;
-  const post = await getPostById(id);
-  const allPosts = await getPosts();
+export default async function PostPage(
+  { params }: { params: { id: string } }
+) {
+  const resolvedParams = await params;
+  const post = await getPostById(resolvedParams.id) as NotionPost;
+  const allPosts = await getPosts() as NotionPost[];
 
   if (!post) {
     notFound();
@@ -140,9 +234,12 @@ export default async function PostPage({ params }: PageProps) {
     ? new Date(post.properties.Date.date.start).toLocaleDateString('ja-JP')
     : '日付なし';
 
+  // 現在の記事のIDを変数に保存
+  const currentPostId = post.id;
+
   // 関連記事を取得（最新の3記事、ただし現在の記事は除く）
   const relatedPosts = allPosts
-    .filter(p => p.id !== id)
+    .filter(p => p.id !== currentPostId)
     .sort((a, b) => {
       const dateA = a.properties.Date?.date?.start || '';
       const dateB = b.properties.Date?.date?.start || '';
@@ -175,7 +272,10 @@ export default async function PostPage({ params }: PageProps) {
 
           <div className="prose prose-zinc max-w-none">
             <div className="mt-8">
-              {post.content?.map((block: any) => (
+              {post.content?.map((
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                block: any
+              ) => (
                 <div key={block.id}>
                   {renderBlock(block)}
                 </div>

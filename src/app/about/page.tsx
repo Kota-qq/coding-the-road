@@ -2,7 +2,6 @@ import { Github, Twitter } from 'lucide-react';
 import Image from 'next/image';
 import { FaPhp, FaLaravel } from 'react-icons/fa';
 import { DiPostgresql } from 'react-icons/di';
-import Link from 'next/link';
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {

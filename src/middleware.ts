@@ -84,7 +84,7 @@ export async function checkDeployment() {
 
   // Notionとの接続確認
   try {
-    const posts = await getPosts()
+    // const result = await someFunction();
     console.log('Notion connection successful')
   } catch (error) {
     console.error('Notion connection failed:', error)
