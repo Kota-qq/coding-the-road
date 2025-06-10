@@ -5,6 +5,9 @@ import { getPosts } from '@/lib/notion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
+// 5分ごとにキャッシュを更新
+export const revalidate = 300;
+
 export default async function Home() {
   const allPosts = await getPosts();
   const latestPosts = allPosts
