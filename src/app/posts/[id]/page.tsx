@@ -132,12 +132,12 @@ export default async function PostPage(
                     <Link
                       key={relatedPost.id}
                       href={`/posts/${relatedPost.id}`}
-                      className="block bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+                      className="block bg-white rounded-xl p-4 sm:p-6 shadow-sm hover:shadow-md transition-shadow h-32 sm:h-36 flex flex-col justify-between"
                     >
-                      <h3 className="font-bold text-zinc-900 mb-2 line-clamp-2">
+                      <h3 className="font-bold text-zinc-900 mb-2 line-clamp-2 text-sm sm:text-base leading-tight">
                         {relatedTitle}
                       </h3>
-                      <time className="text-sm text-zinc-500">
+                      <time className="text-xs sm:text-sm text-zinc-500 mt-auto">
                         {relatedDate}
                       </time>
                     </Link>

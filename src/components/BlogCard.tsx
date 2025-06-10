@@ -52,22 +52,22 @@ export default function BlogCard({
 
   return (
     <article 
-      className={`${baseClasses} ${compactClasses} ${className}`}
+      className={`${baseClasses} ${compactClasses} ${className} h-fit min-h-[200px] flex flex-col`}
       role="article"
       aria-labelledby={`post-title-${post.id}`}
     >
       <Link 
         href={`/posts/${post.id}`} 
-        className="block group focus:outline-none"
+        className="block group focus:outline-none h-full flex flex-col"
         aria-describedby={description ? `post-desc-${post.id}` : undefined}
       >
         {/* タイトル */}
         <h3 
           id={`post-title-${post.id}`}
           className={`
-            font-bold text-zinc-900 mb-3 line-clamp-2 
+            font-bold text-zinc-900 mb-3 line-clamp-3 leading-tight
             group-hover:text-zinc-700 transition-colors duration-200
-            ${variant === 'compact' ? 'text-lg' : 'text-xl'}
+            ${variant === 'compact' ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}
           `.trim()}
         >
           {title}
@@ -77,16 +77,16 @@ export default function BlogCard({
         {description && variant !== 'compact' && (
           <p 
             id={`post-desc-${post.id}`}
-            className="text-zinc-600 text-sm mb-4 line-clamp-3 leading-relaxed"
+            className="text-zinc-600 text-sm mb-4 line-clamp-2 leading-relaxed flex-grow"
           >
             {description}
           </p>
         )}
 
         {/* 投稿日 */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto">
           <time 
-            className="font-mono text-sm text-zinc-500 group-hover:text-zinc-600 transition-colors duration-200"
+            className="font-mono text-xs sm:text-sm text-zinc-500 group-hover:text-zinc-600 transition-colors duration-200"
             dateTime={post.properties.Date.date?.start}
             title={`投稿日: ${formattedDate}`}
           >
@@ -100,10 +100,10 @@ export default function BlogCard({
         </div>
 
         {/* ホバーエフェクト用のインジケーター */}
-        <div className="mt-4 flex items-center text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200">
-          <span className="text-sm font-medium">記事を読む</span>
+        <div className="mt-3 flex items-center text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200">
+          <span className="text-xs sm:text-sm font-medium">記事を読む</span>
           <svg 
-            className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" 
+            className="w-3 h-3 sm:w-4 sm:h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" 
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"

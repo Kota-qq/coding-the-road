@@ -36,7 +36,7 @@ export default async function ArticlesPage(props: Props) {
       <div className="pt-32 pb-20 container mx-auto px-6">
         <div className="max-w-5xl mx-auto">
           <div className="mb-12">
-            <h1 className="font-mono text-4xl font-bold text-zinc-900 mb-4">
+            <h1 className="font-mono text-2xl sm:text-3xl md:text-4xl font-bold text-zinc-900 mb-4">
               ARTICLES
             </h1>
             <div className="h-1 w-20 bg-gradient-to-r from-zinc-900 to-zinc-500"></div>
