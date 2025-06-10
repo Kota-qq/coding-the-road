@@ -63,6 +63,15 @@ export interface NotionRichTextProperty {
 }
 
 /**
+ * Notionのチェックボックスプロパティ
+ */
+export interface NotionCheckbox {
+  id: string;
+  type: 'checkbox';
+  checkbox: boolean;
+}
+
+/**
  * ブログ記事の型定義
  */
 export interface BlogPost {
@@ -73,6 +82,7 @@ export interface BlogPost {
     Title: NotionTitle;
     Date: NotionDate;
     Description: NotionRichTextProperty;
+    Published: NotionCheckbox;
     Tags?: NotionRichTextProperty;
     Status?: {
       id: string;

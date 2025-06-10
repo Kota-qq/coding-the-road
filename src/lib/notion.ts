@@ -136,6 +136,15 @@ export function formatPostDate(post: BlogPost, locale = 'ja-JP'): string {
 }
 
 /**
+ * 記事が公開されているかどうかを取得
+ * @param post - ブログ記事
+ * @returns 公開状態
+ */
+export function isPostPublished(post: BlogPost): boolean {
+  return post.properties.Published?.checkbox || false;
+}
+
+/**
  * 公開されているブログ記事を取得
  * @description キャッシュ機能付きで全ての公開記事を取得
  * @returns ブログ記事の配列
@@ -151,9 +160,9 @@ export const getPosts = cache(async (): Promise<BlogPost[]> => {
     const response = await notion.databases.query({
       database_id: env.NOTION_DATABASE_ID,
       filter: {
-        property: 'Status',
-        status: {
-          equals: 'Published' // 公開済みのみ取得
+        property: 'Published',
+        checkbox: {
+          equals: true // 公開済み（チェックされた）記事のみ取得
         }
       },
       sorts: [

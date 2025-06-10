@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
-import type { NotionPost, NotionBlock } from '@/lib/notion';  // 型をインポート
+import type { BlogPost, NotionBlock } from '@/types/types';  // 新しい型をインポート
 
 // anyの型を修正
 interface RichTextContent {
@@ -129,7 +129,7 @@ export default async function PostPage(
 ) {
   const resolvedParams = await params;
   const post = await getPostById(resolvedParams.id);
-  const allPosts = await getPosts() as NotionPost[];
+  const allPosts = await getPosts() as BlogPost[];
 
   if (!post) {
     notFound();

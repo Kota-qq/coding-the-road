@@ -75,9 +75,10 @@ export function validateEnv(): void {
   } catch (error) {
     console.error('❌ Environment validation failed:', error);
     
-    // 本番環境では起動を停止
+    // Edge Runtimeではprocess.exitは使用できないため、エラーを再スローして
+    // アプリケーション側でハンドリングしてもらう
     if (process.env.NODE_ENV === 'production') {
-      process.exit(1);
+      throw error;
     }
   }
 }
