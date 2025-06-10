@@ -1,21 +1,21 @@
-import { Github, Twitter } from 'lucide-react';
+import { Github, X } from 'lucide-react';
 import Image from 'next/image';
-import { FaPhp, FaLaravel } from 'react-icons/fa';
+import { FaPhp, FaLaravel, FaJs, FaReact } from 'react-icons/fa';
 import { DiPostgresql } from 'react-icons/di';
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: '27歳。国家公務員からエンジニアに転職し1年目。技術の可能性に魅了され、キャリアチェンジを決意した。自社開発企業に勤めながら日々コードに触れ、休日は愛車のランエボXとLANZAと戯れる。',
+  description: '28歳。国家公務員からエンジニアに転職し2年目。技術の可能性に魅了され、キャリアチェンジを決意した。自社開発企業に勤めながら日々コードに触れ、休日は愛車と戯れる。',
   openGraph: {
     title: 'About | Coding the Road',
-    description: '27歳。国家公務員からエンジニアに転職し1年目。技術の可能性に魅了され、キャリアチェンジを決意した。自社開発企業に勤めながら日々コードに触れ、休日は愛車のランエボXとLANZAと戯れる。',
+    description: '28歳。国家公務員からエンジニアに転職し2年目。技術の可能性に魅了され、キャリアチェンジを決意した。自社開発企業に勤めながら日々コードに触れ、休日は愛車と戯れる。',
     images: [
       {
         url: '/about-og.png', // Aboutページ用のOGP画像があれば
         width: 1200,
         height: 630,
-        alt: 'About Kota | Coding the Road'
+        alt: 'About Takibi | Coding the Road'
       }
     ]
   },
@@ -45,10 +45,10 @@ export default function AboutPage() {
             {/* プロフィール情報 */}
             <div className="flex-1 text-center md:text-left">
               <h1 className="font-mono text-4xl font-bold text-zinc-900 mb-4">
-                Kota
+                Takibi
               </h1>
               <p className="text-zinc-600 mb-6">
-                Backend Engineer
+                Engineer
               </p>
               
               {/* SNSリンク */}
@@ -62,12 +62,12 @@ export default function AboutPage() {
                   <Github className="w-6 h-6" />
                 </a>
                 <a
-                  href="https://twitter.com/kota_qq"
+                  href="https://twitter.com/takibi_code"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors"
                 >
-                  <Twitter className="w-6 h-6" />
+                  <X className="w-6 h-6" />
                 </a>
               </div>
             </div>
@@ -80,9 +80,9 @@ export default function AboutPage() {
               <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-zinc-900 to-zinc-500"></span>
             </h2>
             <p className="text-zinc-600 leading-relaxed">
-              27歳。国家公務員からエンジニアに転職し1年目。<br />
+              28歳。国家公務員からエンジニアに転職し2年目。<br />
               技術の可能性に魅了され、キャリアチェンジを決意した。<br />
-              自社開発企業に勤めながら日々コードに触れ、休日は愛車のランエボXとLANZAと戯れる。<br />
+              自社開発企業に勤めながら日々コードに触れ、休日は愛車と戯れる。<br />
               ご質問等ありましたらお気軽にXまでご連絡ください。
             </p>
           </section>
@@ -101,6 +101,14 @@ export default function AboutPage() {
               <div className="flex items-center space-x-2 p-3 bg-white rounded-lg shadow-sm">
                 <FaLaravel className="w-5 h-5 text-red-600" />
                 <p className="font-mono text-zinc-800">Laravel</p>
+              </div>
+                <div className="flex items-center space-x-2 p-3 bg-white rounded-lg shadow-sm">
+                  <FaJs className="w-5 h-5 text-red-600" />
+                  <p className="font-mono text-zinc-800">JavaScript</p>
+              </div>
+              <div className="flex items-center space-x-2 p-3 bg-white rounded-lg shadow-sm">
+                  <FaReact className="w-5 h-5 text-red-600" />
+                  <p className="font-mono text-zinc-800">React</p>
               </div>
               <div className="flex items-center space-x-2 p-3 bg-white rounded-lg shadow-sm">
                 <DiPostgresql className="w-5 h-5 text-blue-600" />
