@@ -155,7 +155,9 @@ export const getPosts = cache(async (): Promise<BlogPost[]> => {
     const env = getEnv();
     const notion = getNotionClient();
     
-    console.log('📚 Fetching posts from Notion...');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📚 Notion記事を取得中...');
+    }
     
     const response = await notion.databases.query({
       database_id: env.NOTION_DATABASE_ID,
@@ -177,7 +179,9 @@ export const getPosts = cache(async (): Promise<BlogPost[]> => {
       .filter((page): page is PageObjectResponse => 'properties' in page)
       .map(transformPageToBlogPost);
     
-    console.log(`✅ Successfully fetched ${posts.length} posts`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ ${posts.length}件の記事を取得完了`);
+    }
     return posts;
     
   } catch (error) {
@@ -192,7 +196,7 @@ export const getPosts = cache(async (): Promise<BlogPost[]> => {
  * @returns ブログ記事（見つからない場合はnull）
  * @throws ApiError - Notion API呼び出しに失敗した場合
  */
-export async function getPostById(pageId: string): Promise<BlogPost | null> {
+export const getPostById = cache(async (pageId: string): Promise<BlogPost | null> => {
   if (!pageId || typeof pageId !== 'string') {
     console.warn('Invalid pageId provided to getPostById:', pageId);
     return null;
@@ -200,8 +204,6 @@ export async function getPostById(pageId: string): Promise<BlogPost | null> {
   
   try {
     const notion = getNotionClient();
-    
-    console.log(`📖 Fetching post with ID: ${pageId}`);
     
     // ページ情報を取得
     const page = await notion.pages.retrieve({ 
@@ -214,10 +216,32 @@ export async function getPostById(pageId: string): Promise<BlogPost | null> {
       page_size: 100 // 最大100ブロック
     });
     
-    const post = transformPageToBlogPost(page);
-    post.content = blocks.results as NotionBlock[];
+    // テーブルブロックの子ブロック（テーブル行）を取得
+    const allBlocks = [];
+    for (const block of blocks.results) {
+      allBlocks.push(block);
+      
+      // テーブルブロックの場合は子ブロックも取得
+      if ('type' in block && block.type === 'table' && 'id' in block) {
+        try {
+          const tableRows = await notion.blocks.children.list({
+            block_id: block.id,
+            page_size: 100
+          });
+          allBlocks.push(...tableRows.results);
+        } catch (error) {
+          console.warn(`テーブル行の取得に失敗: ${block.id}`, error);
+        }
+      }
+    }
     
-    console.log(`✅ Successfully fetched post: ${getPostTitle(post)}`);
+    const post = transformPageToBlogPost(page);
+    post.content = allBlocks as NotionBlock[];
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ 記事取得完了: ${getPostTitle(post)}`);
+      console.log(`📊 総ブロック数: ${allBlocks.length}件 (元: ${blocks.results.length}件)`);
+    }
     return post;
     
   } catch (error) {
@@ -231,7 +255,7 @@ export async function getPostById(pageId: string): Promise<BlogPost | null> {
     
     throw new Error(`Failed to fetch post: ${apiError.message}`);
   }
-}
+});
 
 /**
  * データベース情報を取得

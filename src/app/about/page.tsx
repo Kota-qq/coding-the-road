@@ -1,8 +1,25 @@
-import { Github, X } from 'lucide-react';
+import { Github } from 'lucide-react';
 import Image from 'next/image';
 import { FaPhp, FaLaravel, FaJs, FaReact } from 'react-icons/fa';
 import { DiPostgresql } from 'react-icons/di';
 import type { Metadata } from 'next'
+
+/**
+ * Twitter X Logo Component
+ * @description 正しいTwitter Xのロゴを表示するSVGコンポーネント
+ */
+function TwitterXIcon({ className = "w-6 h-6" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="currentColor"
+      aria-label="Twitter X"
+    >
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  );
+}
 
 export const metadata: Metadata = {
   title: 'About',
@@ -57,7 +74,8 @@ export default function AboutPage() {
                   href="https://github.com/Kota-qq"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors"
+                  className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors rounded-lg hover:bg-zinc-100"
+                  aria-label="GitHubプロフィールを開く"
                 >
                   <Github className="w-6 h-6" />
                 </a>
@@ -65,9 +83,10 @@ export default function AboutPage() {
                   href="https://twitter.com/takibi_code"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors"
+                  className="p-2 text-zinc-600 hover:text-zinc-900 transition-colors rounded-lg hover:bg-zinc-100"
+                  aria-label="Twitter/X プロフィールを開く"
                 >
-                  <X className="w-6 h-6" />
+                  <TwitterXIcon className="w-6 h-6" />
                 </a>
               </div>
             </div>

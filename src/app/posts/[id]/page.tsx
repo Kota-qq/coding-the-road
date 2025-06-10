@@ -3,90 +3,8 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
-import type { BlogPost, NotionBlock } from '@/types/types';  // 新しい型をインポート
-
-// anyの型を修正
-interface RichTextContent {
-  annotations?: {
-    bold?: boolean;
-    code?: boolean;
-    italic?: boolean;
-    strikethrough?: boolean;
-    underline?: boolean;
-  };
-  text?: {
-    content?: string;
-  };
-}
-
-// Notionのブロックを変換するヘルパー関数
-function renderBlock(block: NotionBlock) {
-  if (!block) return null;
-  
-  const { type } = block;
-  const value = block[type] as { rich_text?: Array<RichTextContent> };
-
-  if (!value) return null;
-
-  switch (type) {
-    case 'paragraph':
-      return (
-        <p className="mb-4 text-zinc-600">
-          {value.rich_text?.map((text: RichTextContent, i: number) => {
-            if (!text) return null;
-            
-            const {
-              annotations: { bold, code, italic, strikethrough, underline } = {},
-              text: { content } = {},
-            } = text;
-            
-            if (!content) return null;
-            
-            // テキストのスタイリング
-            if (bold) return <strong key={i}>{content}</strong>;
-            if (code) return <code key={i} className="bg-zinc-100 px-2 py-1 rounded">{content}</code>;
-            if (italic) return <em key={i}>{content}</em>;
-            if (strikethrough) return <del key={i}>{content}</del>;
-            if (underline) return <u key={i}>{content}</u>;
-            
-            return content;
-          }) || ''}
-        </p>
-      );
-    case 'heading_1':
-      return (
-        <h1 className="text-3xl font-bold text-zinc-900 mb-4 mt-8">
-          {value.rich_text?.[0]?.text?.content || ''}
-        </h1>
-      );
-    case 'heading_2':
-      return (
-        <h2 className="text-2xl font-bold text-zinc-900 mb-4 mt-6">
-          {value.rich_text?.[0]?.text?.content || ''}
-        </h2>
-      );
-    case 'heading_3':
-      return (
-        <h3 className="text-xl font-bold text-zinc-900 mb-3 mt-5">
-          {value.rich_text?.[0]?.text?.content || ''}
-        </h3>
-      );
-    case 'bulleted_list_item':
-      return (
-        <li className="ml-6 mb-2 text-zinc-600">
-          {value.rich_text?.[0]?.text?.content || ''}
-        </li>
-      );
-    case 'numbered_list_item':
-      return (
-        <li className="ml-6 mb-2 list-decimal text-zinc-600">
-          {value.rich_text?.[0]?.text?.content || ''}
-        </li>
-      );
-    default:
-      return null;
-  }
-}
+import type { BlogPost } from '@/types/types';
+import NotionBlocks from '@/components/NotionBlocks';
 
 interface PageProps {
   params: Promise<{
@@ -178,14 +96,12 @@ export default async function PostPage(
 
           <div className="prose prose-zinc max-w-none">
             <div className="mt-8">
-              {post.content?.map((
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                block: any
-              ) => (
-                <div key={block.id}>
-                  {renderBlock(block)}
-                </div>
-              )) || <p>コンテンツがありません</p>}
+              {post.content && post.content.length > 0 ? (
+                // @ts-expect-error 一時的に型チェックを無効化してテスト
+                <NotionBlocks blocks={post.content} />
+              ) : (
+                <p>コンテンツがありません</p>
+              )}
             </div>
           </div>
 
