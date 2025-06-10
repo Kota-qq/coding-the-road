@@ -86,7 +86,7 @@ export default async function PostPage(
           </div>
 
           <div className="mb-8">
-            <h1 className="font-mono text-4xl font-bold text-zinc-900 mb-4">
+            <h1 className="font-mono text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900 mb-4 leading-tight">
               {title}
             </h1>
             <div className="flex items-center text-zinc-600 text-sm">
@@ -118,7 +118,7 @@ export default async function PostPage(
           {/* 関連記事セクション */}
           {relatedPosts.length > 0 && (
             <div className="mt-16 pt-8 border-t border-zinc-200">
-              <h2 className="font-mono text-2xl font-bold text-zinc-900 mb-6">
+              <h2 className="font-mono text-lg sm:text-xl md:text-2xl font-bold text-zinc-900 mb-6">
                 RELATED ARTICLES
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
