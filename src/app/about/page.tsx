@@ -49,14 +49,22 @@ export default function AboutPage() {
           {/* プロフィールヘッダー */}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-16">
             {/* プロフィール画像 */}
-            <div className="relative w-40 h-40 rounded-full overflow-hidden bg-zinc-200">
+            <div className="relative w-40 h-40 rounded-full overflow-hidden bg-zinc-200 shadow-lg">
               <Image
-                src="/profile.png"
-                alt="Profile"
+                src="/profile.webp"
+                alt="Takibiのプロフィール写真"
                 fill
                 className="object-cover grayscale hover:grayscale-0 transition-all duration-500"
                 priority
+                quality={85}
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R7XTvY9VyPNZPqz/9k="
+                sizes="(max-width: 768px) 160px, 160px"
               />
+              {/* Loading spinner */}
+              <div className="absolute inset-0 flex items-center justify-center bg-zinc-100 opacity-0 animate-pulse">
+                <div className="w-8 h-8 border-2 border-zinc-300 border-t-zinc-600 rounded-full animate-spin"></div>
+              </div>
             </div>
             
             {/* プロフィール情報 */}

@@ -5,7 +5,6 @@
 
 import Link from 'next/link';
 import { BlogPost } from '@/types/types';
-import { getPostTitle, getPostDescription, formatPostDate } from '@/lib/notion';
 
 /**
  * BlogCardのProps
@@ -29,10 +28,16 @@ export default function BlogCard({
   variant = 'default',
   className = '' 
 }: BlogCardProps) {
-  const title = getPostTitle(post);
-  const description = getPostDescription(post);
-  const formattedDate = formatPostDate(post);
-  
+  const title = post.properties.Title?.title?.[0]?.plain_text || 'No Title';
+  const description = post.properties.Description?.rich_text?.[0]?.plain_text || '';
+  const date = post.properties.Date?.date?.start 
+    ? new Date(post.properties.Date.date.start).toLocaleDateString('ja-JP', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    : '日付なし';
+
   // 記事が無効な場合の防御的プログラミング
   if (!post?.id) {
     console.warn('BlogCard: Invalid post data provided');
@@ -61,61 +66,36 @@ export default function BlogCard({
         className="block group focus:outline-none h-full flex flex-col"
         aria-describedby={description ? `post-desc-${post.id}` : undefined}
       >
-        {/* タイトル */}
-        <h3 
-          id={`post-title-${post.id}`}
-          className={`
-            font-bold text-zinc-900 mb-3 line-clamp-3 leading-tight
-            group-hover:text-zinc-700 transition-colors duration-200
-            ${variant === 'compact' ? 'text-base sm:text-lg' : 'text-lg sm:text-xl'}
-          `.trim()}
-        >
-          {title}
-        </h3>
-
-        {/* 説明文（compactモードでは非表示） */}
-        {description && variant !== 'compact' && (
-          <p 
-            id={`post-desc-${post.id}`}
-            className="text-zinc-600 text-sm mb-4 line-clamp-2 leading-relaxed flex-grow"
-          >
-            {description}
-          </p>
-        )}
-
-        {/* 投稿日 */}
-        <div className="flex items-center justify-between mt-auto">
-          <time 
-            className="font-mono text-xs sm:text-sm text-zinc-500 group-hover:text-zinc-600 transition-colors duration-200"
-            dateTime={post.properties.Date.date?.start}
-            title={`投稿日: ${formattedDate}`}
-          >
-            {formattedDate}
-          </time>
+        <div className="p-6">
+          <div className="flex justify-between items-start mb-3">
+            <time 
+              dateTime={post.properties.Date?.date?.start}
+              className="text-sm text-zinc-500"
+            >
+              {date}
+            </time>
+          </div>
           
-          {/* 読む時間の表示（将来的な拡張用） */}
-          {/* <span className="text-xs text-zinc-400">
-            約 {readingTime} 分で読めます
-          </span> */}
-        </div>
-
-        {/* ホバーエフェクト用のインジケーター */}
-        <div className="mt-3 flex items-center text-zinc-400 group-hover:text-zinc-600 transition-colors duration-200">
-          <span className="text-xs sm:text-sm font-medium">記事を読む</span>
-          <svg 
-            className="w-3 h-3 sm:w-4 sm:h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M9 5l7 7-7 7" 
-            />
-          </svg>
+          <header>
+            <h2 className="text-xl font-semibold mb-3 text-zinc-900 line-clamp-2 leading-relaxed">
+              {title}
+            </h2>
+          </header>
+          
+          {description && (
+            <p className="text-zinc-600 line-clamp-3 leading-relaxed">
+              {description}
+            </p>
+          )}
+          
+          <footer className="mt-4 pt-4 border-t border-zinc-100">
+            <span className="text-blue-600 hover:text-blue-800 font-medium transition-colors inline-flex items-center">
+              続きを読む
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </span>
+          </footer>
         </div>
       </Link>
     </article>

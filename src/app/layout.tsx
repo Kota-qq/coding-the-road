@@ -23,13 +23,23 @@ export const metadata: Metadata = {
     'Laravel',
     'Next.js',
     'TypeScript',
-    'PHP'
+    'PHP',
+    '技術ブログ',
+    '開発者',
+    'フロントエンド',
+    'バックエンド'
   ],
   authors: [{ 
     name: 'Kota',
     url: 'https://twitter.com/kota_qq'
   }],
   creator: 'Kota',
+  publisher: 'Kota',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
@@ -51,7 +61,7 @@ export const metadata: Metadata = {
     title: 'Coding the Road',
     description: 'エンジン音とキーボードのリズムが響き合う。車とバイク好きなエンジニアの技術記録。',
     creator: '@kota_qq',
-    images: ['/og-image.png']
+    images: ['/logo.webp']
   },
   robots: {
     index: true,
@@ -65,11 +75,13 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'あなたのGoogle Search Console確認コード',
+    // Google Search Consoleに登録後、実際の確認コードに置き換えてください
+    // google: 'あなたのGoogle Search Console確認コード',
   },
   alternates: {
     canonical: 'https://codingtheroad.com'
-  }
+  },
+  category: 'technology',
 }
 
 export const viewport = {
@@ -85,9 +97,11 @@ export default function RootLayout({
     <html lang="ja">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="32x32" />
+        <link rel="icon" href="/logo.webp" type="image/webp" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
       </head>
       <body className={`min-h-screen bg-gradient-to-b from-zinc-50 to-zinc-100 ${inter.className}`}>
         <Header />

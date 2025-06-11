@@ -190,6 +190,9 @@ export const getPosts = cache(async (): Promise<BlogPost[]> => {
   }
 });
 
+// Next.js App Router用のキャッシュ設定
+export const revalidate = 3600; // 1時間キャッシュ
+
 /**
  * 指定されたIDのブログ記事を取得
  * @param pageId - 記事のID
